@@ -1,0 +1,36 @@
+###############################################################################
+# PYTHON REQUIREMENTS SPEC
+###############################################################################
+
+#
+# This file defines the top-level dependencies required by this repository
+# Ideally, each dependency is only using a semver-major version range.
+# Run `make freeze` to resolve and pin these, and all transitive depencencies,
+# to absolute versions.
+#
+
+# -----------------------------------------------------------------------------
+# PYPI depencencies
+# -----------------------------------------------------------------------------
+
+# Code Formatting
+black>= 24.3.0
+isort>=5,<6
+
+# Code linting and static analysis
+flake8-bugbear>=21,<22
+flake8-comprehensions>=3,<4
+flake8>=4,<5
+
+# Testing frameworks
+# The `custom-exit-code` plugin is required due to https://github.com/pytest-dev/pytest/issues/2393
+pytest-cov>=3,<4
+pytest-custom-exit-code<1
+pytest-mock>=3,<4
+pytest-reportlog<1
+pytest>=7,<8
+
+# git hooks
+arrow<1.2.2
+gitlint<0.18.0
+sh<1.14.3
