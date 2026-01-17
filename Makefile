@@ -152,20 +152,25 @@ _helper-ensure-pwd-is-reporoot:
 
 # Create solution files
 override SRC_LC_DIR := $(REPOROOT)/src/leetcode_solutions
-override TEST_DIR := $(REPOROOT)/test
 override NUM ?=
+override PROBLEM_NUM = problem$(NUM)
+override PROBLEM_NUM_DIR = $(SRC_LC_DIR)/$(PROBLEM_NUM)
+override PROBLEM_FILE_PATH = $(PROBLEM_NUM_DIR)/solution.py
+override INIT_FILE_PATH = $(PROBLEM_NUM_DIR)/__init__.py
+override README_FILE_PATH = $(PROBLEM_NUM_DIR)/README.md
+override TEST_FILE_PATH := $(REPOROOT)/test/test_problem$(NUM).py
 .PHONT: __create_solution_files
 _create_solution_files:
-	@mkdir -p $(SRC_LC_DIR)/problem$(NUM)
-	@echo INFO "Created Directory: $(SRC_LC_DIR)/problem$(NUM)";
-	@touch $(SRC_LC_DIR)/problem$(NUM)/solution.py
-	@echo INFO "Created File: $(SRC_LC_DIR)/problem$(NUM)/solution.py";
-	@touch $(SRC_LC_DIR)/problem$(NUM)/__init__.py
-	@echo INFO "Created File: $(SRC_LC_DIR)/problem$(NUM)/__init__.py";
-	@touch $(SRC_LC_DIR)/problem$(NUM)/README.md
-	@echo INFO "Created File: $(SRC_LC_DIR)/problem$(NUM)/README.md";
-	@touch $(TEST_DIR)/test_problem$(NUM).py
-	@echo INFO "Created File: $(TEST_DIR)/test_problem$(NUM).py";
+	@mkdir -p $(PROBLEM_NUM_DIR)
+	@echo INFO "Created Directory: $(PROBLEM_NUM_DIR)";
+	@touch $(PROBLEM_FILE_PATH)
+	@echo INFO "Created File: $(PROBLEM_FILE_PATH)";
+	@touch $(INIT_FILE_PATH)
+	@echo INFO "Created File: $(INIT_FILE_PATH)";
+	@touch $(README_FILE_PATH)
+	@echo INFO "Created File: $(README_FILE_PATH)";
+	@touch $(TEST_FILE_PATH)
+	@echo INFO "Created File: $(TEST_FILE_PATH)";
 
 # -----------------------------------------------------------------------------
 # TARGETS - TESTS
