@@ -1,21 +1,23 @@
 import pytest
+
 from leetcode_solutions.problem79.solution import Solution
+
 
 @pytest.mark.parametrize(
     "board, word, expected",
     [
         (
-            [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+            [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]],
             "ABCCED",
             True,
         ),
         (
-            [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+            [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]],
             "SEE",
             True,
         ),
         (
-            [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+            [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]],
             "ABCB",
             False,
         ),

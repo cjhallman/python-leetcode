@@ -18,9 +18,9 @@ black>= 24.3.0
 isort>=5,<6
 
 # Code linting and static analysis
-flake8-bugbear>=21,<22
-flake8-comprehensions>=3,<4
-flake8>=4,<5
+flake8-bugbear>=21
+flake8-comprehensions>=3
+flake8>=4
 
 # Testing frameworks
 # The `custom-exit-code` plugin is required due to https://github.com/pytest-dev/pytest/issues/2393

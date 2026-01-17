@@ -19,36 +19,24 @@ override WORKROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 # TARGETS - PRIMARY
 # -----------------------------------------------------------------------------
 .PHONY: init
-init: \ ## Create virtualenv and install dependencies
-	_python-venv-create \
-	_python-pip-install
+init: _python-venv-create _python-pip-install ## Create virtualenv and install dependencies
 
 .PHONY: freeze
-freeze: \ ## Rebuild requirements.txt
-	_helper-ensure-pwd-is-reporoot \
-	_python-venv-clean \
-	_python-venv-create \
-	_python-pip-freeze \
-	_python-pip-install
-
+freeze: _helper-ensure-pwd-is-reporoot _python-venv-clean _python-venv-create _python-pip-freeze _python-pip-install ## Rebuild requirements.txt
+	
 .PHONY: fmt
-fmt: \ ## Format Python code
-	_helper-ensure-pwd-is-reporoot \
-	_fmt-python-isort \
-	_fmt-python-black
-
+fmt: _helper-ensure-pwd-is-reporoot _fmt-python-isort _fmt-python-black ## Format Python code
+	
 .PHONY: lint
-lint: \ ## Lint Python code
-	_helper-ensure-pwd-is-reporoot \
-	_lint-python-isort \
-	_lint-python-black \
-	_lint-python-flake8
-
+lint: _helper-ensure-pwd-is-reporoot _lint-python-isort _lint-python-black _lint-python-flake8 ## Lint Python code
+	
 # Run pytest
 .PHONY: test
-test: \ ## Run pytest (supports TEST= and PYTEST_ARGS)
-	_helper-ensure-pwd-is-reporoot \
-	_run-pytest
+test: _helper-ensure-pwd-is-reporoot _run-pytest  ## Run pytest (supports TEST= and PYTEST_ARGS)
+
+# Create solution files
+.PHONY: solution
+solution: _helper-ensure-pwd-is-reporoot _create_solution_files  ## Create solution files for NUM={problem number}
 	 
 
 # -----------------------------------------------------------------------------
@@ -162,6 +150,23 @@ _helper-ensure-pwd-is-reporoot:
 	exit 1; \
 	fi 
 
+# Create solution files
+override SRC_LC_DIR := $(REPOROOT)/src/leetcode_solutions
+override TEST_DIR := $(REPOROOT)/test
+override NUM ?=
+.PHONT: __create_solution_files
+_create_solution_files:
+	@mkdir -p $(SRC_LC_DIR)/problem$(NUM)
+	@echo INFO "Created Directory: $(SRC_LC_DIR)/problem$(NUM)";
+	@touch $(SRC_LC_DIR)/problem$(NUM)/solution.py
+	@echo INFO "Created File: $(SRC_LC_DIR)/problem$(NUM)/solution.py";
+	@touch $(SRC_LC_DIR)/problem$(NUM)/__init__.py
+	@echo INFO "Created File: $(SRC_LC_DIR)/problem$(NUM)/__init__.py";
+	@touch $(SRC_LC_DIR)/problem$(NUM)/README.md
+	@echo INFO "Created File: $(SRC_LC_DIR)/problem$(NUM)/README.md";
+	@touch $(TEST_DIR)/test_problem$(NUM).py
+	@echo INFO "Created File: $(TEST_DIR)/test_problem$(NUM).py";
+
 # -----------------------------------------------------------------------------
 # TARGETS - TESTS
 # -----------------------------------------------------------------------------
@@ -173,6 +178,7 @@ _helper-ensure-pwd-is-reporoot:
 override PYTEST_ARGS ?=
 override TEST ?=
 
+.PHONY: _run-pytest
 _run-pytest:
 	@echo INFO $@ is STARTING...
 	@source $(VENV_ACTIVATE) \
