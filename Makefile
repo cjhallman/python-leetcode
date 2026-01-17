@@ -19,12 +19,12 @@ override WORKROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 # TARGETS - PRIMARY
 # -----------------------------------------------------------------------------
 .PHONY: init
-init: \
+init: \ ## Create virtualenv and install dependencies
 	_python-venv-create \
 	_python-pip-install
 
 .PHONY: freeze
-freeze: \
+freeze: \ ## Rebuild requirements.txt
 	_helper-ensure-pwd-is-reporoot \
 	_python-venv-clean \
 	_python-venv-create \
@@ -32,13 +32,13 @@ freeze: \
 	_python-pip-install
 
 .PHONY: fmt
-fmt: \
+fmt: \ ## Format Python code
 	_helper-ensure-pwd-is-reporoot \
 	_fmt-python-isort \
 	_fmt-python-black
 
 .PHONY: lint
-lint: \
+lint: \ ## Lint Python code
 	_helper-ensure-pwd-is-reporoot \
 	_lint-python-isort \
 	_lint-python-black \
@@ -46,7 +46,7 @@ lint: \
 
 # Run pytest
 .PHONY: test
-test: \
+test: \ ## Run pytest (supports TEST= and PYTEST_ARGS)
 	_helper-ensure-pwd-is-reporoot \
 	_run-pytest
 	 
@@ -73,9 +73,10 @@ _python-venv-create:
 # Install Requirements 
 .PHONY: _python-pip-install
 _python-pip-install:
-	@echo INFO $@ is STARTING... 
+	@echo INFO $@ is STARTING...
 	@source $(VENV_ACTIVATE) \
-		&& pip-sync --quiet $(REPOROOT)/requirements.txt
+		&& pip-sync --quiet $(REPOROOT)/requirements.txt \
+		&& pip install -e $(REPOROOT)
 	@echo INFO $@ is DONE
 
 .PHONY: _python-venv-clean
@@ -165,9 +166,32 @@ _helper-ensure-pwd-is-reporoot:
 # TARGETS - TESTS
 # -----------------------------------------------------------------------------
 
-.PHONY: _run-pytest
+# Extra pytest args:
+#   make test TEST=path::test_name
+#   make test TEST=path::test_name[param]
+#   make test PYTEST_ARGS="-k pattern"
+override PYTEST_ARGS ?=
+override TEST ?=
+
 _run-pytest:
-	@echo INFO $@ is STARTING... 
+	@echo INFO $@ is STARTING...
 	@source $(VENV_ACTIVATE) \
-	&& pytest -s -vv
+	&& pytest -s -vv $(PYTEST_ARGS) $(TEST)
 	@echo INFO $@ is DONE
+
+# -----------------------------------------------------------------------------
+# TARGETS - HELP
+# -----------------------------------------------------------------------------
+.PHONY: help
+help:
+	@echo ""
+	@echo "Available targets:"
+	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
+	| awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@echo ""
+	@echo "Test examples:"
+	@echo "  make test"
+	@echo "  make test TEST=test/test_problem79.py"
+	@echo "  make test TEST=test/test_problem79.py::test_exist"
+	@echo "  make test TEST=\"test/test_problem79.py::test_exist[ABCB]\""
+	@echo "  make test PYTEST_ARGS=\"-k ABCB\""
