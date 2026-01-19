@@ -17,7 +17,7 @@ class ListNode:
 
     def __str__(self):
         return self.__repr__()
-    
+
     def __eq__(self, head: ListNode):
         node = self
         while node and head:
@@ -26,7 +26,8 @@ class ListNode:
             node = node.next
             head = head.next
         return not node and not head
-    
+
+
 def buildHeadFromList(vals: List[int]):
     if len(vals) == 0:
         return None

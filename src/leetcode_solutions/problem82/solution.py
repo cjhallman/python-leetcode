@@ -2,6 +2,7 @@ from typing import Optional
 
 from leetcode_solutions.nodes.nodes import ListNode
 
+
 class Solution:
     def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
         """
@@ -23,7 +24,6 @@ class Solution:
             print(f"Looking at p1: {p1.val}, p2: {p2.val}, p3: {p3.val}")
             if p2.val == p3.val:
                 while p3 and p2.val == p3.val:
-                    print(f"p2 == p3")
                     p3 = p3.next
                 p1.next = p3
                 p2 = p3
